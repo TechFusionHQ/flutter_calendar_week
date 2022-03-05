@@ -1,15 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_week/src/date_item.dart';
 import 'package:flutter_calendar_week/src/models/decoration_item.dart';
 import 'package:flutter_calendar_week/src/models/week_item.dart';
-import 'package:flutter_calendar_week/src/date_item.dart';
-import 'package:flutter_calendar_week/src/utils/find_current_week_index.dart';
-import 'package:flutter_calendar_week/src/utils/separate_weeks.dart';
-import 'package:flutter_calendar_week/src/utils/compare_date.dart';
-
 import 'package:flutter_calendar_week/src/strings.dart';
 import 'package:flutter_calendar_week/src/utils/cache_stream.dart';
+import 'package:flutter_calendar_week/src/utils/compare_date.dart';
+import 'package:flutter_calendar_week/src/utils/find_current_week_index.dart';
+import 'package:flutter_calendar_week/src/utils/separate_weeks.dart';
 
 class CalendarWeekController {
 /*
@@ -125,8 +124,11 @@ class CalendarWeek extends StatefulWidget {
   /// Style of dates
   final TextStyle dateStyle;
 
-  /// Specify a style for today
+  /// Specify a style for today date
   final TextStyle todayDateStyle;
+
+  /// Specify a style for today of week
+  final TextStyle todayStyle;
 
   /// Specify a background for today
   final Color todayBackgroundColor;
@@ -192,6 +194,7 @@ class CalendarWeek extends StatefulWidget {
       this.monthAlignment,
       this.dateStyle,
       this.todayDateStyle,
+      this.todayStyle,
       this.todayBackgroundColor,
       this.datePressedBackgroundColor,
       this.datePressedStyle,
@@ -228,6 +231,8 @@ class CalendarWeek extends StatefulWidget {
               const TextStyle(color: Colors.blue, fontWeight: FontWeight.w400),
           TextStyle todayDateStyle = const TextStyle(
               color: Colors.orange, fontWeight: FontWeight.w400),
+          TextStyle todayStyle = const TextStyle(
+              color: Colors.orange, fontWeight: FontWeight.w400),
           Color todayBackgroundColor = Colors.black12,
           Color pressedDateBackgroundColor = Colors.blue,
           TextStyle pressedDateStyle =
@@ -257,6 +262,7 @@ class CalendarWeek extends StatefulWidget {
           dayOfWeekStyle,
           monthAlignment,
           dateStyle,
+          todayStyle,
           todayDateStyle,
           todayBackgroundColor,
           pressedDateBackgroundColor,
@@ -295,6 +301,8 @@ class _CalendarWeekState extends State<CalendarWeek> {
 
   CalendarWeekController get controller =>
       widget.controller ?? _defaultCalendarController;
+
+  int todayIndex = DateTime.now().weekday - 1;
 
   void _jumToDateHandler(DateTime? dateTime) {
     _cacheStream.add(dateTime);
@@ -396,10 +404,8 @@ class _CalendarWeekState extends State<CalendarWeek> {
           width: 50,
           child: Text(
             title,
-            style: widget.weekendsIndexes
-                        .indexOf(widget.daysOfWeek.indexOf(title)) !=
-                    -1
-                ? widget.weekendsStyle
+            style: widget.daysOfWeek.indexOf(title) == todayIndex
+                ? widget.todayStyle
                 : widget.dayOfWeekStyle,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,

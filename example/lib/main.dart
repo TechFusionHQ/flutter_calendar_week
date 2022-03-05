@@ -62,6 +62,7 @@ class _HomePageState extends State<HomePage> {
                 onWeekChanged: () {
                   // Do something
                 },
+                weekendsStyle: const TextStyle(color: Colors.blue, fontWeight: FontWeight.w400),
                 monthViewBuilder: (DateTime time) => Align(
                   alignment: FractionalOffset.center,
                   child: Container(
