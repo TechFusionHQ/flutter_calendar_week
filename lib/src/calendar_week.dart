@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_week/src/date_item.dart';
@@ -57,6 +58,8 @@ Example:
 
   /// Today date time
   DateTime _today = DateTime.now();
+
+  int _todayIndex = DateTime.now().weekday - 1;
 
   /// Store hast attach to a client state
   bool _hasClient = false;
@@ -302,8 +305,6 @@ class _CalendarWeekState extends State<CalendarWeek> {
   CalendarWeekController get controller =>
       widget.controller ?? _defaultCalendarController;
 
-  int todayIndex = DateTime.now().weekday - 1;
-
   void _jumToDateHandler(DateTime? dateTime) {
     _cacheStream.add(dateTime);
     _pageController.animateToPage(widget.controller!._currentWeekIndex,
@@ -355,22 +356,21 @@ class _CalendarWeekState extends State<CalendarWeek> {
       ));
 
   /// Layout of week
-  Widget _week(WeekItem weeks) => Column(
+  Widget _week(WeekItem week) => Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           // Month
-          (widget.monthDisplay &&
-                  widget.monthViewBuilder != null &&
-                  weeks.days.firstWhere((el) => el != null) != null)
-              ? widget
-                  .monthViewBuilder!(weeks.days.firstWhere((el) => el != null)!)
-              : _monthItem(weeks.month),
+          if (widget.monthDisplay &&
+              widget.monthViewBuilder != null &&
+              week.days.firstWhere((el) => el != null) != null)
+            widget
+                .monthViewBuilder!(week.days.firstWhere((el) => el != null)!),
 
           /// Day of week layout
-          _dayOfWeek(weeks.dayOfWeek),
+          _dayOfWeek(week),
 
           /// Date layout
-          _dates(weeks.days)
+          _dates(week.days)
         ],
       );
 
@@ -388,15 +388,15 @@ class _CalendarWeekState extends State<CalendarWeek> {
       );
 
   /// Day of week layout
-  Widget _dayOfWeek(List<String> dayOfWeek) => Container(
+  Widget _dayOfWeek(WeekItem week) => Container(
         margin: widget.marginDayOfWeek,
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: dayOfWeek.map(_dayOfWeekItem).toList()),
+            children: week.dayOfWeek.map((e) =>_dayOfWeekItem(week, e)).toList()),
       );
 
   /// Day of week item layout
-  Widget _dayOfWeekItem(String title) => Container(
+  Widget _dayOfWeekItem(WeekItem week, String title) => Container(
       alignment: Alignment.center,
       child: FittedBox(
         fit: BoxFit.scaleDown,
@@ -404,7 +404,8 @@ class _CalendarWeekState extends State<CalendarWeek> {
           width: 50,
           child: Text(
             title,
-            style: widget.daysOfWeek.indexOf(title) == todayIndex
+            style: widget.daysOfWeek.indexOf(title) == controller._todayIndex
+                 && week.days.contains(controller._today)
                 ? widget.todayStyle
                 : widget.dayOfWeekStyle,
             overflow: TextOverflow.ellipsis,
