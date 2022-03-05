@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_week/src/date_item.dart';
 import 'package:flutter_calendar_week/src/models/decoration_item.dart';
