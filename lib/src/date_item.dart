@@ -25,11 +25,14 @@ class DateItem extends StatefulWidget {
   /// Specify a background after pressed
   final Color? pressedBackgroundColor;
 
+  /// Specify a splash color on pressed
+  final Color? splashColor;
+
   /// Alignment a decoration
   final Alignment? decorationAlignment;
 
   /// Specify a shape
-  final ShapeBorder? dayShapeBorder;
+  final OutlinedBorder? dayShapeBorder;
 
   /// [Callback] function for press event
   final void Function(DateTime)? onDatePressed;
@@ -56,7 +59,8 @@ class DateItem extends StatefulWidget {
     this.dayShapeBorder,
     this.onDatePressed,
     this.onDateLongPressed,
-    this.decoration,
+    this.decoration, 
+    this.splashColor = Colors.white,
   });
 
   @override
@@ -101,16 +105,19 @@ class __DateItemState extends State<DateItem> {
 
   /// Body layout
   Widget _body() => Container(
-        width: 50,
-        height: 50,
+        width: 36,
+        height: 36,
         alignment: FractionalOffset.center,
         child: GestureDetector(
           onLongPress: _onLongPressed,
-          child: FlatButton(
-              padding: EdgeInsets.all(5),
+          child: TextButton(
               onPressed: _onPressed,
-              color: _defaultBackgroundColor!,
-              shape: widget.dayShapeBorder!,
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.all(5),
+                backgroundColor: _defaultBackgroundColor!,
+                shape: widget.dayShapeBorder!,
+                primary: widget.splashColor,
+              ),
               child: Stack(
                 children: <Widget>[
                   Positioned(

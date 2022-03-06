@@ -138,6 +138,9 @@ class CalendarWeek extends StatefulWidget {
   /// Specify background for date after pressed
   final Color datePressedBackgroundColor;
 
+  /// Specify splash color on pressed
+  final Color splashColor;
+
   /// Specify a style for date after pressed
   final TextStyle datePressedStyle;
 
@@ -187,35 +190,36 @@ class CalendarWeek extends StatefulWidget {
   final Function() onWeekChanged;
 
   CalendarWeek._(
-      Key? key,
-      this.maxDate,
-      this.minDate,
-      this.height,
-      this.monthViewBuilder,
-      this.dayOfWeekStyle,
-      this.monthAlignment,
-      this.dateStyle,
-      this.todayDateStyle,
-      this.todayStyle,
-      this.todayBackgroundColor,
-      this.datePressedBackgroundColor,
-      this.datePressedStyle,
-      this.dateBackgroundColor,
-      this.onDatePressed,
-      this.onDateLongPressed,
-      this.backgroundColor,
-      this.daysOfWeek,
-      this.months,
-      this.monthDisplay,
-      this.weekendsIndexes,
-      this.weekendsStyle,
-      this.marginMonth,
-      this.marginDayOfWeek,
-      this.dayShapeBorder,
-      this.decorations,
-      this.controller,
-      this.onWeekChanged)
-      : assert(daysOfWeek.length == 7),
+    Key? key,
+    this.maxDate,
+    this.minDate,
+    this.height,
+    this.monthViewBuilder,
+    this.dayOfWeekStyle,
+    this.monthAlignment,
+    this.dateStyle,
+    this.todayDateStyle,
+    this.todayStyle,
+    this.todayBackgroundColor,
+    this.datePressedBackgroundColor,
+    this.datePressedStyle,
+    this.splashColor,
+    this.dateBackgroundColor,
+    this.onDatePressed,
+    this.onDateLongPressed,
+    this.backgroundColor,
+    this.daysOfWeek,
+    this.months,
+    this.monthDisplay,
+    this.weekendsIndexes,
+    this.weekendsStyle,
+    this.marginMonth,
+    this.marginDayOfWeek,
+    this.dayShapeBorder,
+    this.decorations,
+    this.controller,
+    this.onWeekChanged,
+  )   : assert(daysOfWeek.length == 7),
         assert(months.length == 12),
         assert(minDate.isBefore(maxDate)),
         super(key: key);
@@ -239,6 +243,7 @@ class CalendarWeek extends StatefulWidget {
           Color pressedDateBackgroundColor = Colors.blue,
           TextStyle pressedDateStyle =
               const TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
+          Color splashColor = Colors.white,
           Color dateBackgroundColor = Colors.transparent,
           Function(DateTime)? onDatePressed,
           Function(DateTime)? onDateLongPressed,
@@ -269,6 +274,7 @@ class CalendarWeek extends StatefulWidget {
           todayBackgroundColor,
           pressedDateBackgroundColor,
           pressedDateStyle,
+          splashColor,
           dateBackgroundColor,
           onDatePressed ?? (DateTime date) {},
           onDateLongPressed ?? (DateTime date) {},
@@ -431,6 +437,7 @@ class _CalendarWeekState extends State<CalendarWeek> {
       backgroundColor: widget.dateBackgroundColor,
       todayBackgroundColor: widget.todayBackgroundColor,
       pressedBackgroundColor: widget.datePressedBackgroundColor,
+      splashColor: widget.splashColor,
       decorationAlignment: () {
         /// If date is contain in decorations list, use decorations Alignment
         if (widget.decorations.isNotEmpty) {

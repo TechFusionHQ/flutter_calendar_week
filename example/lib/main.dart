@@ -44,6 +44,9 @@ class _HomePageState extends State<HomePage> {
               ]),
               child: CalendarWeek(
                 controller: _controller,
+                todayBackgroundColor: Colors.black ,
+                pressedDateBackgroundColor: Colors.white,
+                pressedDateStyle: TextStyle(color: Colors.black),
                 height: 100,
                 showMonth: true,
                 minDate: DateTime.now().add(
