@@ -5,6 +5,7 @@ import 'package:flutter_calendar_week/src/models/decoration_item.dart';
 import 'package:flutter_calendar_week/src/models/week_item.dart';
 import 'package:flutter_calendar_week/src/strings.dart';
 import 'package:flutter_calendar_week/src/utils/cache_stream.dart';
+import 'package:flutter_calendar_week/src/utils/check_date_of_week.dart';
 import 'package:flutter_calendar_week/src/utils/compare_date.dart';
 import 'package:flutter_calendar_week/src/utils/find_current_week_index.dart';
 import 'package:flutter_calendar_week/src/utils/separate_weeks.dart';
@@ -171,7 +172,7 @@ class CalendarWeek extends StatefulWidget {
   final EdgeInsets marginMonth;
 
   /// Shape of day
-  final ShapeBorder dayShapeBorder;
+  final OutlinedBorder dayShapeBorder;
 
   /// List of decorations
   final List<DecorationItem> decorations;
@@ -361,8 +362,7 @@ class _CalendarWeekState extends State<CalendarWeek> {
           if (widget.monthDisplay &&
               widget.monthViewBuilder != null &&
               week.days.firstWhere((el) => el != null) != null)
-            widget
-                .monthViewBuilder!(week.days.firstWhere((el) => el != null)!),
+            widget.monthViewBuilder!(week.days.firstWhere((el) => el != null)!),
 
           /// Day of week layout
           _dayOfWeek(week),
@@ -390,7 +390,8 @@ class _CalendarWeekState extends State<CalendarWeek> {
         margin: widget.marginDayOfWeek,
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: week.dayOfWeek.map((e) =>_dayOfWeekItem(week, e)).toList()),
+            children:
+                week.dayOfWeek.map((e) => _dayOfWeekItem(week, e)).toList()),
       );
 
   /// Day of week item layout
@@ -402,8 +403,8 @@ class _CalendarWeekState extends State<CalendarWeek> {
           width: 50,
           child: Text(
             title,
-            style: widget.daysOfWeek.indexOf(title) == controller._todayIndex
-                 && week.days.contains(controller._today)
+            style: widget.daysOfWeek.indexOf(title) == controller._todayIndex &&
+                    checkDateOfWeek(week, controller._today)
                 ? widget.todayStyle
                 : widget.dayOfWeekStyle,
             overflow: TextOverflow.ellipsis,
