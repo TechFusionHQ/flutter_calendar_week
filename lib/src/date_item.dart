@@ -13,17 +13,14 @@ class DateItem extends StatefulWidget {
   /// Style of [date]
   final TextStyle? dateStyle;
 
-  /// Style of day after pressed
-  final TextStyle? pressedDateStyle;
-
   /// Background
-  final Color? backgroundColor;
+  final Color? dateBgColor;
 
-  /// Specify a background if [date] is [today]
-  final Color? todayBackgroundColor;
+  /// Style of day after pressed
+  final TextStyle? highlightDateStyle;
 
   /// Specify a background after pressed
-  final Color? pressedBackgroundColor;
+  final Color? highlightDateBgColor;
 
   /// Specify a splash color on pressed
   final Color? splashColor;
@@ -51,15 +48,14 @@ class DateItem extends StatefulWidget {
     required this.date,
     required this.cacheStream,
     this.dateStyle,
-    this.pressedDateStyle,
-    this.backgroundColor = Colors.transparent,
-    this.todayBackgroundColor = Colors.orangeAccent,
-    this.pressedBackgroundColor,
+    this.dateBgColor = Colors.transparent,
+    this.highlightDateStyle,
+    this.highlightDateBgColor,
     this.decorationAlignment = FractionalOffset.center,
     this.dayShapeBorder,
     this.onDatePressed,
     this.onDateLongPressed,
-    this.decoration, 
+    this.decoration,
     this.splashColor = Colors.white,
   });
 
@@ -80,21 +76,21 @@ class __DateItemState extends State<DateItem> {
           cacheStream: widget.cacheStream,
           cacheBuilder: (_, data) {
             /// Set default each [builder] is called
-            _defaultBackgroundColor = widget.backgroundColor;
+            _defaultBackgroundColor = widget.dateBgColor;
 
             /// Set default style each [builder] is called
             _defaultTextStyle = widget.dateStyle;
 
-            /// Check and set [Background] of today
-            if (compareDate(widget.date, widget.today)) {
-              _defaultBackgroundColor = widget.todayBackgroundColor;
-            } else if (!data.hasError && data.hasData) {
-              final DateTime? dateSelected = data.data;
-              if (compareDate(widget.date, dateSelected)) {
-                _defaultBackgroundColor = widget.pressedBackgroundColor;
-                _defaultTextStyle = widget.pressedDateStyle;
-              }
+            // Set bg and style for highlight Date (default is Today)
+            var dateSelected = widget.today;
+            if (!data.hasError && data.hasData) {
+              dateSelected = data.data ?? widget.today;
             }
+            if (compareDate(widget.date, dateSelected)) {
+              _defaultBackgroundColor = widget.highlightDateBgColor;
+              _defaultTextStyle = widget.highlightDateStyle;
+            }
+
             return _body();
           },
         )

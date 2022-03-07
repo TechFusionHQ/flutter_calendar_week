@@ -44,11 +44,13 @@ class _HomePageState extends State<HomePage> {
               ]),
               child: CalendarWeek(
                 controller: _controller,
-                todayBackgroundColor: Colors.black ,
-                pressedDateBackgroundColor: Colors.white,
-                pressedDateStyle: TextStyle(color: Colors.black),
+                highlightDayStyle:
+                    TextStyle(color: Colors.green, fontWeight: FontWeight.w400),
+                highlightDateBgColor: Colors.green,
+                highlightDateStyle:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
                 height: 100,
-                showMonth: true,
+                showMonth: false,
                 minDate: DateTime.now().add(
                   Duration(days: -359),
                 ),
@@ -65,7 +67,6 @@ class _HomePageState extends State<HomePage> {
                 onWeekChanged: () {
                   // Do something
                 },
-                weekendsStyle: const TextStyle(color: Colors.blue, fontWeight: FontWeight.w400),
                 monthViewBuilder: (DateTime time) => Align(
                   alignment: FractionalOffset.center,
                   child: Container(
